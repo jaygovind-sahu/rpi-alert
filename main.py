@@ -9,7 +9,6 @@ import feedparser
 
 
 def send_email(message):
-    print(message)
     context = ssl.create_default_context()
     with smtplib.SMTP(
             os.environ['RPIALERT_SMTP_SERVER'],
@@ -39,7 +38,7 @@ def main():
     alerts = []
     for entry in feed['entries']:
         summary = entry['summary']
-        if summary.strip().lower().startswith('stock alert (za)'):
+        if summary.strip().lower().startswith('stock alert (us)'):
             link = entry['link']
             published_at = datetime.fromtimestamp(mktime(entry['published_parsed']))
             staleness = (datetime.now() - published_at).total_seconds()

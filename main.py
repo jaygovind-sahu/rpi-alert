@@ -2,6 +2,7 @@ import os
 import smtplib
 import ssl
 
+from pytz import timezone
 from time import mktime
 from datetime import datetime
 
@@ -34,18 +35,21 @@ def format_message(alerts):
 
 
 def main():
-    feed = feedparser.parse("https://rpilocator.com/feed/")
+    feed = feedparser.parse("https://rpilocator.com/feed/?country=US")
     alerts = []
     for entry in feed['entries']:
         summary = entry['summary']
-        if summary.strip().lower().startswith('stock alert (us)'):
-            link = entry['link']
-            published_at = datetime.fromtimestamp(mktime(entry['published_parsed']))
-            staleness = (datetime.now() - published_at).total_seconds()
-            if abs(staleness) < int(os.environ['RPIALERT_FRESHNESS_THRESHOLD']):
-                alerts.append((summary, link, published_at))
+        link = entry['link']
+        gmt = timezone('GMT')
+        rtz = timezone(os.environ['RPIALERT_RECIPIENT_TZ'])
+        published_gmt = gmt.localize(datetime.fromtimestamp(mktime(entry['published_parsed'])))
+        published_est = published_gmt.astimezone(rtz)
+        staleness = (datetime.now(rtz) - published_est).total_seconds()
+        if staleness < int(os.environ['RPIALERT_FRESHNESS_THRESHOLD']):
+            alerts.append((summary, link, published_est))
     if alerts:
-        send_email(format_message(alerts))
+        message = format_message(alerts)
+        send_email(message)
 
 
 if __name__ == "__main__":

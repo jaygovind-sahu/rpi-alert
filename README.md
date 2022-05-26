@@ -10,6 +10,7 @@ export RPIALERT_SMTP_SERVER="smtp.gmail.com"
 export RPIALERT_SENDER_EMAIL="your@gmail.com"
 export RPIALERT_SENDER_PW="yourpassword"
 export RPIALERT_RECIPIENT_EMAIL="another@email.id"
+export RPIALERT_RECIPIENT_TZ="US/Eastern"
 export RPIALERT_FRESHNESS_THRESHOLD=660
 ```
 
@@ -24,5 +25,5 @@ wget -O main.py https://raw.githubusercontent.com/jaygovind-sahu/rpi-alert/main/
 #### Cron
 
 ```shell
-*/10 * * * * sudo python3 /path/to/rpi-alert/main.py
+*/10 * * * * sudo -E python3 /path/to/rpi-alert/main.py
 ```

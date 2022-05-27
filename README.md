@@ -1,6 +1,6 @@
 # RPI Alert
 
-Reads an RSS feed and sends email if any RPI is available in the US.
+Use the RPI Locator (https://rpilocator.com/) RSS feed to get new Raspberry PI stock alerts.
 
 ### Environment
 
@@ -16,14 +16,18 @@ export RPIALERT_FRESHNESS_THRESHOLD=660
 
 ### Install
 
-Either `git clone` or download:
+Either `git clone` or download or upload:
 
 ```shell
 wget -O main.py https://raw.githubusercontent.com/jaygovind-sahu/rpi-alert/main/main.py
 ```
 
-#### Cron
+```shell
+scp main.py pi@pi-hole.local:/home/pi/RpiAlert/
+```
+
+### Cron
 
 ```shell
-*/10 * * * * sudo -E python3 /path/to/rpi-alert/main.py
+*/10 * * * * sudo -E python3 /home/pi/RpiAlert/main.py
 ```

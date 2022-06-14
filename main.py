@@ -12,6 +12,7 @@ from typing import List
 import feedparser
 from pytz import timezone
 
+# Change this URL as needed
 RPILOCATOR_FEED_URL = 'https://rpilocator.com/feed/?country=US'
 
 
